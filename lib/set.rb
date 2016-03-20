@@ -88,47 +88,191 @@
       end
     end
 
-    def find_set(board)
-      # sort on all 4 axis
+    def find_set
       # call set? method on these 3 cards
       start_index = 0
       match_found = false
-      
-      # 012, 123, 234, 345
-      ending_index = @board.length - 3
+
+      # sort on all 4 axis
+      # check to see if found match by number
+      board_by_num = sort_by_num
+      ending_index = board_by_num.length - 3
       ending_index.times do
+        # 012, 123, 234, 345
         match_found = set?(@deck[start_index], @deck[start_index + 1], @deck[start_index + 2])
-        start_index += 1
+        if match_found
+          puts "Match found"
+          return match_found
+        else
+          start_index += 1
+        end
       end
 
-
-      if match_found == false
-        puts "There are no matches on the board."
-        return match_found
-      else
-        puts "Match found."
+      # check to see if found match by number
+      board_by_num = sort_by_num
+      ending_index = board_by_num.length - 3
+      ending_index.times do
+        # 012, 123, 234, 345
+        match_found = set?(@deck[start_index], @deck[start_index + 1], @deck[start_index + 2])
+        if match_found
+          puts "Match found"
+          return match_found
+        else
+          start_index += 1
+        end
       end
+
+      # check to see if found match by number
+      board_by_num = sort_by_num
+      ending_index = board_by_num.length - 3
+      ending_index.times do
+        # 012, 123, 234, 345
+        match_found = set?(@deck[start_index], @deck[start_index + 1], @deck[start_index + 2])
+        if match_found
+          puts "Match found"
+          return match_found
+        else
+          start_index += 1
+        end
+      end
+
+      # check to see if found match by shading
+      board_by_shade = sort_by_shading
+      ending_index = board_by_shade.length - 3
+      ending_index.times do
+        # 012, 123, 234, 345
+        match_found = set?(@deck[start_index], @deck[start_index + 1], @deck[start_index + 2])
+        if match_found
+          puts "Match found"
+          return match_found
+        else
+          start_index += 1
+        end
+      end
+
+      # if reached here there aren't matches
+      puts "There were no matches on the board."
       return match_found
     end
 
     def sort_by_num
-      @deck.each do |card|
-
-
+      # sort by 1, then 2, and then 3
+      board_sorted_by_num = []
+      board = @board.dup
+      board.each do |card|
+        if card.number == 1
+          board_sorted_by_num.push(card)
+          board.delete(card)
+        end
       end
+
+      board.each do |card|
+        if card.number == 2
+          board_sorted_by_num.push(card)
+          board.delete(card)
+        end
+      end
+      board_sorted_by_num = board_sorted_by_num + board
+
+      return board_sorted_by_num
     end
 
     def sort_by_color
+      # sort by red, then green and finally purple
+      board_sorted_by_color = []
+      board = @board.dup
+      board.each do |card|
+        if card.color == 'red'
+          board_sorted_by_color.push(card)
+          board.delete(card)
+        end
+      end
 
+      board.each do |card|
+        if card.color == 'green'
+          board_sorted_by_color.push(card)
+          board.delete(card)
+        end
+      end
+      board_sorted_by_color = board_sorted_by_color + board
+
+      return board_sorted_by_color
     end
 
     def sort_by_shape
+      # sort by oval, diamond then squiggle
+      board_sorted_by_shape = []
+      board = @board.dup
+      board.each do |card|
+        if card.shape == "oval"
+          board_sorted_by_shape.push(card)
+          board.delete(card)
+        end
+      end
 
+      board.each do |card|
+        if card.shape == "diamond"
+          board_sorted_by_shape.push(card)
+          board.delete(card)
+        end
+      end
+      board_sorted_by_shape = board_sorted_by_shape + board
+
+      return board_sorted_by_shape
     end
 
     def sort_by_shading
+      # sort by solid, empty, striped
+      board_sorted_by_shading = []
+      board = @board.dup
+      board.each do |card|
+        if card.shading == "solid"
+          board_sorted_by_shading.push(card)
+          board.delete(card)
+        end
+      end
 
+      board.each do |card|
+        if card.shading == "empty"
+          board_sorted_by_shading.push(card)
+          board.delete(card)
+        end
+      end
+      board_sorted_by_shading = board_sorted_by_shading + board
+
+      return board_sorted_by_shading
     end
+
+
+    def sort_by(sorting_hash)
+      # can't get this to work
+
+      # sorts by an attribute (number, color, shape or shading)
+      attribute = sorting_hash[:attribute]
+      first_type = sorting_hash[:first_type]
+      second_type = sorting_hash[:second_type]
+      print "attr: #{attribute}, first: #{first_type}, sec: #{second_type}"
+
+      board_sorted_by_x = []
+      board = @board
+      board.each do |card|
+        if card.attribute == first_type
+          board_sorted_by_x.push(card)
+          board.delete(card)
+        end
+      end
+
+      board.each do |card|
+        if card.attribute == second_type
+          board_sorted_by_x.push(card)
+          board.delete(card)
+        end
+      end
+      board_sorted_by_x = board_sorted_by_x + board
+
+      return board_sorted_by_x
+    end
+
   end # board class
 
   def play_game

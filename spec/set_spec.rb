@@ -27,23 +27,45 @@ describe Deck do
 end
 
 describe Board do
-  before(:all) do
-    @my_board = Board.new
+  before(:each) do
+    @demo_deck = Deck.new
+    @my_board = Board.new(@demo_deck)
   end
 
 
   it 'has 12 cards at the beginning' do
     expect(@my_board.board_num_of_cards).to eq(12)
+  end
 
+  it 'can add cards to itself' do
+    @my_board.add_card
+    expect(@my_board.board_num_of_cards).to eq(13)
+    expect(@demo_deck.count_cards).to eq(81-13)
+  end
+
+  it 'can remove 3 cards from itself at a time' do
+    expect(@my_board.board_num_of_cards).to eq(12)
+    @my_board.remove_cards(0, 1, 2)
+    expect(@my_board.board_num_of_cards).to eq(12-3)
+  end
+
+  it "can sort by number" do
+    sorted = @my_board.sort_by_num
+
+
+  end
+
+  context "when no matches on board" do
   end
 
   let(:card1) {Card.new(1, 'red', 'diamond', 'empty' )}
   let(:card2) {Card.new(1, 'red', 'diamond', 'empty' )}
   let(:card3) {Card.new(1, 'red', 'diamond', 'empty' )}
 
-  # it 'can determine if have a set' do
-  #   puts card1.color
-  #   expect(set?(card1, card2, card3)).to eq(true)
-  # end
+  it 'can determine if have a set' do
+    puts card1.color
+    puts @my_board.board_num_of_cards
+    expect(set?(card1, card2, card3)).to eq(true)
+  end
 
 end

@@ -45,27 +45,25 @@ describe Board do
 
   it 'can remove 3 cards from itself at a time' do
     expect(@my_board.board_num_of_cards).to eq(12)
-    @my_board.remove_cards(0, 1, 2)
+    @my_board.remove_cards(2, 1, 0)
     expect(@my_board.board_num_of_cards).to eq(12-3)
   end
 
-  it "can sort by number" do
-    sorted = @my_board.sort_by_num
-
-
+  it "can store a set of 3 cards" do
+    @my_board.capture_set(2,1,0)
+    puts @my_board.sets
+    expect(@my_board.sets[0].length).to eq(3)
   end
 
-  context "when no matches on board" do
+  context "game complete" do
+    before(:each) do
+      @demo_deck = Deck.new
+      @my_board_end = Board.new(@demo_deck)
+      play_game(@demo_deck, @my_board_end)
+    end
+    it 'will have no more cards in deck' do
+
+      expect(@demo_deck.count_cards).to eq(nil)
+    end
   end
-
-  let(:card1) {Card.new(1, 'red', 'diamond', 'empty' )}
-  let(:card2) {Card.new(1, 'red', 'diamond', 'empty' )}
-  let(:card3) {Card.new(1, 'red', 'diamond', 'empty' )}
-
-  it 'can determine if have a set' do
-    puts card1.color
-    puts @my_board.board_num_of_cards
-    expect(set?(card1, card2, card3)).to eq(true)
-  end
-
 end

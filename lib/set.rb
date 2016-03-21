@@ -44,9 +44,8 @@
     end
 
     def count_cards
-
       if @deck.length == 0
-        puts "no more cards in the deck!"
+        # puts "no more cards in the deck!"
         return
       end
 
@@ -54,7 +53,7 @@
       @deck.each do |card|
         num_cards += 1
       end
-      puts "#{num_cards} cards left in the deck"
+      # puts "#{num_cards} cards left in the deck"
       return num_cards
     end
 
@@ -65,12 +64,13 @@
   end # deck class
 
   class Board
-    attr_accessor :board_num_of_cards, :score
+    attr_accessor :board_num_of_cards, :score, :sets
 
     def initialize(deck)
       @board = []
       @myDeck = deck
       @score = 0
+      @sets = {}
       STARTINGCARDS.times do
         card = @myDeck.draw
         @board.push(card)
@@ -85,6 +85,7 @@
     end
 
     def remove_cards(largest_index, middle_index, smallest_index)
+      capture_set(largest_index, middle_index, smallest_index)
       @board.delete_at(largest_index)
       @board.delete_at(middle_index)
       @board.delete_at(smallest_index)
@@ -92,23 +93,45 @@
       @board_num_of_cards = @board.length
     end
 
+    def capture_set(largest_index, middle_index, smallest_index)
+      card3 = {
+        number: @board[largest_index].number,
+        color: @board[largest_index].color,
+        shape: @board[largest_index].shape,
+        shading: @board[largest_index].shading
+      }
+      card2 = {
+        number: @board[middle_index].number,
+        color: @board[middle_index].color,
+        shape: @board[middle_index].shape,
+        shading: @board[middle_index].shading
+      }
+      card1 = {
+        number: @board[smallest_index].number,
+        color: @board[smallest_index].color,
+        shape: @board[smallest_index].shape,
+        shading: @board[smallest_index].shading
+      }
+      @sets[@score] = [card1, card2, card3]
+    end
+
     def increment_score
       @score += 1
-      print " Score is now: #{@score}"
+      # print " Score is now: #{@score}"
     end
 
     def set?(card1, card2, card3)
       if(card1.color == card2.color && card2.color == card3.color)
-        puts "found a match by the color #{card1.color}"
+        # puts "found a match by the color #{card1.color}"
         return true
       elsif(card1.number == card2.number && card2.number == card3.number)
-        puts "found a match by the number #{card1.number}"
+        # puts "found a match by the number #{card1.number}"
         return true
       elsif(card1.shape == card2.shape && card2.shape == card3.shape)
-        puts "found a match by the shape #{card1.shape}"
+        # puts "found a match by the shape #{card1.shape}"
         return true
       elsif(card1.shading == card2.shading && card2.shading == card3.shading)
-        puts "found a match by the shade #{card1.shading}"
+        # puts "found a match by the shading #{card1.shading}"
       else
         return false
       end
@@ -116,6 +139,13 @@
 
     def find_set
       # sort on all 4 axis
+
+      # guard clause
+      if @board.length == 0
+        3.times do
+          @board.add_card
+        end
+      end
       start_index = 0
       match_found = false
 
@@ -315,30 +345,32 @@
 
   end # board class
 
-  def play_game
+  def play_game(deck, board)
     # create and populate board with cards from a newed up deck
-    playable_deck = Deck.new
     print "Dealing.........."
-    my_board = Board.new(playable_deck)
+    playable_deck = deck
+    my_board = board
     print "Starting a new game of Set."
 
     # game is done if deck is empty and no sets to be found
-    while playable_deck.count_cards != 0 && my_board.find_set == true
+    until playable_deck.count_cards.nil? && my_board.find_set == true
       # see if there are set matches
       if my_board.find_set == true
         # if yes, remove set and increment @score
       else
         # if no, draw 3 more cards onto the board, then search again
-        unless playable_deck.count_cards == 0
           3.times do
             my_board.add_card
           end
-        end
       end
-    end #until
+      print " num of cards in deck: #{playable_deck.count_cards.nil?}"
+
+    end #while
     print "Game over. "
     print "You were able to find #{my_board.score} sets during this session. "
+    print "The sets were:"
+    my_board.sets.each do |set|
+      puts set
+    end
     print "Jolly good show!"
   end
-
-  play_game

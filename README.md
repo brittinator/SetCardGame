@@ -1,9 +1,9 @@
 # SetCardGame
-March 20 2016
-Ruby Implementation of the matching style card game 'Set'
-Coding Challenge
+March 20 2016  
+Ruby Implementation of the matching style card game 'Set'  
+Coding Challenge  
 
-* Using Rspec for unit tests. Code coverage calculated: 91.55%
+* Using Rspec for unit tests. Code coverage calculated: 91.55%  
 
 ## Classes
 * _Card, Deck, Board_
@@ -29,20 +29,26 @@ each card has 1 of each attribute below
 * can add and remove 3 cards at a time
 * needs to find sets by each attribute`
 
-## Play Game method
+## Required Methods:
+### Play Game method
 * play a game
   * instantiate deck of cards
   * tells when game is complete
   * returns how many matched sets happened
 
-## Set? method
+### Set? method
 * input 3 cards
 * output T/F if can make a set
 
-## findSet method
+### find_set method
 * input board of cards
 * either
     * find set
     * determine no sets available  
     * My implementation of this was to sort the board by each characteristic, and then walk through the entire board. This is likely not very efficient, as you have to sort and then go through entire board 4 times.
 Note: I know recursion is a possibility for traversing the board to get 3 cards at a time, but I'm not comfortable enough with that algorithm at this time.
+
+## Discussion
+* I am satisfied with this solution to the Set game. It took a while to think up another way (instead of recursion) to compare each card to 2 other cards to find a set.  
+* If I spent more time on this, I would refactor and DRY up the code. Specifically the separate sorting methods for each card attribute is very repetitive and is ripe for refactoring.  I attempted to DRY it out but was unsuccessful. Also the capture_set method looks repetitive to me and I would refactor it.
+* I would also have liked to use a case switch statement for the set huh method but felt my time best used on getting working code and code coverage.  

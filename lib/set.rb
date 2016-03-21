@@ -26,6 +26,7 @@
       @num_cards = count_cards
       @deck.shuffle!
       @deck.shuffle!
+      @deck.shuffle!
     end
 
     def create_deck
@@ -43,11 +44,17 @@
     end
 
     def count_cards
+
+      if @deck.length == 0
+        puts "no more cards in the deck!"
+        return
+      end
+
       num_cards = 0
       @deck.each do |card|
         num_cards += 1
       end
-      puts "#{num_cards} number of cards left in the deck"
+      puts "#{num_cards} cards left in the deck"
       return num_cards
     end
 
@@ -58,11 +65,12 @@
   end # deck class
 
   class Board
-    attr_accessor :board_num_of_cards
+    attr_accessor :board_num_of_cards, :score
 
-    def initialize
+    def initialize(deck)
       @board = []
-      @myDeck = Deck.new
+      @myDeck = deck
+      @score = 0
       STARTINGCARDS.times do
         card = @myDeck.draw
         @board.push(card)
@@ -70,80 +78,109 @@
       @board_num_of_cards = @board.length
     end
 
-    def add_cards
+    def add_card
       card = @myDeck.draw
       @board.push(card)
+      @board_num_of_cards = @board.length
     end
 
-    def set?(card1, card2, card3)
+    def remove_cards(largest_index, middle_index, smallest_index)
+      @board.delete_at(largest_index)
+      @board.delete_at(middle_index)
+      @board.delete_at(smallest_index)
+      print " There are #{@board_num_of_cards} cards on the board"
+      @board_num_of_cards = @board.length
+    end
+
+    def increment_score
+      @score += 1
+      print " Score is now: #{@score}"
+    end
+
+    def set?(type, card1, card2, card3)
       if(card1.color == card2.color && card2.color == card3.color)
+        puts "found a match by the color #{card1.color}"
         return true
       elsif(card1.number == card2.number && card2.number == card3.number)
+        puts "found a match by the number #{card1.number}"
         return true
       elsif(card1.shape == card2.shape && card2.shape == card3.shape)
+        puts "found a match by the shape #{card1.shape}"
         return true
       elsif(card1.shading == card2.shading && card2.shading == card3.shading)
+        puts "found a match by the shade #{card1.shading}"
       else
         return false
       end
     end
 
     def find_set
-      # call set? method on these 3 cards
+      # sort on all 4 axis
       start_index = 0
       match_found = false
 
-      # sort on all 4 axis
       # check to see if found match by number
       board_by_num = sort_by_num
       ending_index = board_by_num.length - 3
       ending_index.times do
         # 012, 123, 234, 345
-        match_found = set?(@deck[start_index], @deck[start_index + 1], @deck[start_index + 2])
+        # call set? method on these 3 cards
+        match_found = set?(board_by_num[start_index], board_by_num[start_index + 1], board_by_num[start_index + 2])
         if match_found
-          puts "Match found"
+          @board = board_by_num
+          # remove the set
+          remove_cards((start_index + 2), (start_index + 1), (start_index))
+          # increment score
+          increment_score
           return match_found
         else
           start_index += 1
         end
       end
 
-      # check to see if found match by number
-      board_by_num = sort_by_num
-      ending_index = board_by_num.length - 3
+      start_index = 0
+
+      # check to see if found match by color
+      board_by_color = sort_by_color
+      ending_index = board_by_color.length - 3
       ending_index.times do
         # 012, 123, 234, 345
-        match_found = set?(@deck[start_index], @deck[start_index + 1], @deck[start_index + 2])
+        match_found = set?(board_by_color[start_index], board_by_color[start_index + 1], board_by_color[start_index + 2])
         if match_found
-          puts "Match found"
+          @board = board_by_color
+          remove_cards((start_index + 2), (start_index + 1), (start_index))
           return match_found
         else
           start_index += 1
         end
       end
 
-      # check to see if found match by number
-      board_by_num = sort_by_num
-      ending_index = board_by_num.length - 3
+      start_index = 0
+
+      # check to see if found match by shape
+      board_by_shape = sort_by_shape
+      ending_index = board_by_shape.length - 3
       ending_index.times do
-        # 012, 123, 234, 345
-        match_found = set?(@deck[start_index], @deck[start_index + 1], @deck[start_index + 2])
+        match_found = set?(board_by_shape[start_index], board_by_shape[start_index + 1], board_by_shape[start_index + 2])
         if match_found
-          puts "Match found"
+          @board = board_by_shape
+          remove_cards((start_index + 2), (start_index + 1), (start_index))
           return match_found
         else
           start_index += 1
         end
       end
+
+      start_index = 0
 
       # check to see if found match by shading
       board_by_shade = sort_by_shading
       ending_index = board_by_shade.length - 3
       ending_index.times do
-        # 012, 123, 234, 345
-        match_found = set?(@deck[start_index], @deck[start_index + 1], @deck[start_index + 2])
+        match_found = set?(board_by_shade[start_index], board_by_shade[start_index + 1], board_by_shade[start_index + 2])
         if match_found
-          puts "Match found"
+          @board = board_by_shade
+          remove_cards((start_index + 2), (start_index + 1), (start_index))
           return match_found
         else
           start_index += 1
@@ -276,24 +313,31 @@
   end # board class
 
   def play_game
-    # create a deck
+    # create and populate board with cards from a newed up deck
     playable_deck = Deck.new
-    # create and populate board with cards
-    my_board = Board.new
-    score = 0
-
+    print "Dealing.........."
+    my_board = Board.new(playable_deck)
+    @score = 0
+    print "Starting a new game of Set."
     # game is done if deck is empty and no sets to be found
-    until playable_deck.count_cards == 0 && find_set(my_board) == false
+    while playable_deck.count_cards != 0 && my_board.find_set == true
       # see if there are set matches
-      if find_set(my_board) == true
-        # if yes, remove set and increment score
-        score += 1
+      if my_board.find_set == true
+        # if yes, remove set and increment @score
+        @score += 1
+        print "Yes! Score is now #{@score}"
       else
         # if no, draw 3 more cards onto the board, then search again
-        3.times do
-          my_board.add_cards
+        unless playable_deck.count_cards == 0
+          3.times do
+            my_board.add_card
+          end
         end
       end
     end #until
-    puts "Game over.  You were able to find #{score} sets during this session. Jolly good show!"
+    print "Game over. "
+    print "You were able to find #{@score} sets during this session. "
+    print "Jolly good show!"
   end
+
+  play_game

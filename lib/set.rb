@@ -97,7 +97,7 @@
       print " Score is now: #{@score}"
     end
 
-    def set?(type, card1, card2, card3)
+    def set?(card1, card2, card3)
       if(card1.color == card2.color && card2.color == card3.color)
         puts "found a match by the color #{card1.color}"
         return true
@@ -149,6 +149,7 @@
         if match_found
           @board = board_by_color
           remove_cards((start_index + 2), (start_index + 1), (start_index))
+          increment_score
           return match_found
         else
           start_index += 1
@@ -165,6 +166,7 @@
         if match_found
           @board = board_by_shape
           remove_cards((start_index + 2), (start_index + 1), (start_index))
+          increment_score
           return match_found
         else
           start_index += 1
@@ -181,6 +183,7 @@
         if match_found
           @board = board_by_shade
           remove_cards((start_index + 2), (start_index + 1), (start_index))
+          increment_score
           return match_found
         else
           start_index += 1
@@ -317,15 +320,13 @@
     playable_deck = Deck.new
     print "Dealing.........."
     my_board = Board.new(playable_deck)
-    @score = 0
     print "Starting a new game of Set."
+
     # game is done if deck is empty and no sets to be found
     while playable_deck.count_cards != 0 && my_board.find_set == true
       # see if there are set matches
       if my_board.find_set == true
         # if yes, remove set and increment @score
-        @score += 1
-        print "Yes! Score is now #{@score}"
       else
         # if no, draw 3 more cards onto the board, then search again
         unless playable_deck.count_cards == 0
@@ -336,7 +337,7 @@
       end
     end #until
     print "Game over. "
-    print "You were able to find #{@score} sets during this session. "
+    print "You were able to find #{my_board.score} sets during this session. "
     print "Jolly good show!"
   end
 

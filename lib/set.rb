@@ -24,9 +24,9 @@
       @deck = []
       @deck = create_deck
       @num_cards = count_cards
-      @deck.shuffle!
-      @deck.shuffle!
-      @deck.shuffle!
+      3.times do
+        @deck.shuffle!
+      end
     end
 
     def create_deck
@@ -171,7 +171,6 @@
       end
 
       start_index = 0
-
       # check to see if found match by shape
       board_by_shape = sort_by_shape
       ending_index = board_by_shape.length - 3
@@ -188,7 +187,6 @@
       end
 
       start_index = 0
-
       # check to see if found match by shading
       board_by_shade = sort_by_shading
       ending_index = board_by_shade.length - 3

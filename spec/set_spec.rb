@@ -2,9 +2,18 @@ require 'spec_helper'
 require "./lib/set"
 
 describe Card do
-    let(:card) {Card.new(1, 'red', 'solid', 'clear' )}
+    let(:card) {Card.new(1, 'red', 'oval', 'solid' )}
     it 'has a color' do
       expect(card.color).to eq('red')
+    end
+    it 'has a number' do
+      expect(card.number).to eq(1)
+    end
+    it 'has a shading' do
+      expect(card.shading).to eq('solid')
+    end
+    it 'has a shape' do
+      expect(card.shape).to eq('oval')
     end
 
 end #describe Card
@@ -37,7 +46,7 @@ describe Board do
     expect(@my_board.board_num_of_cards).to eq(12)
   end
 
-  it 'can add cards to itself' do
+  it 'can add cards to itself from deck' do
     @my_board.add_card
     expect(@my_board.board_num_of_cards).to eq(13)
     expect(@demo_deck.count_cards).to eq(81-13)
@@ -51,7 +60,6 @@ describe Board do
 
   it "can store a set of 3 cards" do
     @my_board.capture_set(2,1,0)
-    puts @my_board.sets
     expect(@my_board.sets[0].length).to eq(3)
   end
 

@@ -5,7 +5,15 @@ Coding Challenge
 
 * written in Ruby
 * Using Rspec for unit tests. Code coverage calculated: 91.55%  
-  * use `rspec` from terminal to run tests
+
+## How To Run
+  * Pull repository down from github
+  * Dependencies: Ruby, Rspec
+  * If you need to install rspec, type `gem install rspec`  
+  * Navigate to the root folder in a terminal window  
+
+  To 'Play' a game: `ruby lib/set.rb`  
+  To run rspec tests: `rspec`  
 
 ## Classes
 * _Card, Deck, Board_

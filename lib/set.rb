@@ -117,12 +117,17 @@
     def set?(card1, card2, card3)
       # TODO: use case switch statement instead of if/elses
       if(card1.color == card2.color && card2.color == card3.color)
+        puts "found a match by the color #{card1.color}"
         return true
       elsif(card1.number == card2.number && card2.number == card3.number)
+        puts "found a match by the number #{card1.number}"
         return true
       elsif(card1.shape == card2.shape && card2.shape == card3.shape)
+        puts "found a match by the shape #{card1.shape}"
         return true
       elsif(card1.shading == card2.shading && card2.shading == card3.shading)
+        puts "found a match by the shading #{card1.shading}"
+        return true
       else
         return false
       end
@@ -324,3 +329,10 @@
     print "Jolly good show!"
     return my_board.sets
   end
+
+
+  # will play a set game automatically when run file
+  my_deck = Deck.new
+  board = Board.new(my_deck)
+
+  play_game(my_deck, board)

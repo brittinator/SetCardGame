@@ -10,10 +10,10 @@ Coding Challenge
   * Pull repository down from github
   * Dependencies: Ruby, Rspec
   * If you need to install rspec, type `gem install rspec`  
-  * Navigate to the root folder in a terminal window  
+  * Navigate to the root folder in a terminal window "SetCardGame"
 
   To 'Play' a game: `ruby lib/set.rb`  
-  To run rspec tests: `rspec`  
+  To run rspec tests: `rspec`  (the game will be played also as that's automatically done in the game file)
 
 ## Classes
 * _Card, Deck, Board_

@@ -56,7 +56,9 @@
     end
 
     def draw
-      return (@deck.pop)
+      until (@deck.length == 0)
+        return (@deck.pop)
+      end
     end
   end # deck class
 
@@ -115,7 +117,6 @@
     end
 
     def set?(card1, card2, card3)
-      # TODO: use case switch statement instead of if/elses
       if(card1.color == card2.color && card2.color == card3.color)
         puts "found a match by the color #{card1.color}"
         return true
@@ -134,12 +135,6 @@
     end
 
     def find_set
-      # guard clause if board is empty
-      if @board.length == 0
-        3.times do
-          @board.add_card
-        end
-      end
       start_index = 0
       match_found = false
 
@@ -309,20 +304,22 @@
     print "Starting a new game of Set."
 
     # game is done if deck is empty and no sets to be found
-    until playable_deck.count_cards.nil? && my_board.find_set == true
+    until playable_deck.count_cards.nil? && my_board.find_set == false
       # see if there are set matches
       if my_board.find_set == true
         # if yes, board removes set and increment @score
       else
         # if no, draw 3 more cards onto the board, then search again
-          3.times do
-            my_board.add_card
+          until playable_deck.count_cards.nil?
+            3.times do
+              my_board.add_card
+            end
           end
       end
     end #until
     print "Game over. "
     print "You were able to find #{my_board.score} sets during this session. "
-    print "The sets were:"
+    puts "The sets were:"
     my_board.sets.each do |set|
       puts set
     end
